@@ -46,5 +46,23 @@ public class CategoryRepository {
                 .getResultList();
         return result.isEmpty() ? Optional.empty() : Optional.of(result.get(0));
     }
+
+    // 카테고리에 포함되어 있는 프로덕트의 개수 반환
+    public long countProductsByCategoryId(Long id) {
+        return em.createQuery(
+                        "SELECT COUNT(p) FROM Product p WHERE p.category.id = :id", Long.class)
+                .setParameter("id", id)
+                .getSingleResult();
+    }
+
+    public void delete(Long id) {
+        Category category = em.find(Category.class, id);
+
+        if(category != null) {
+            em.remove(category);
+        } else {
+            throw new IllegalArgumentException("삭제하려는 카테고리가 존재하지 않습니다. ID: " + id);
+        }
+    }
 }
 
