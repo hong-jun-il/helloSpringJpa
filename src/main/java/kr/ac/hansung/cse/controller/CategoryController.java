@@ -36,7 +36,7 @@ public class CategoryController {
                                  BindingResult bindingResult,
                                  RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) {
-            return "categoryForm"; // 오류가 있는 채로 폼 뷰 재표시
+            return "categoryForm";
         }
 
         try {
@@ -46,9 +46,16 @@ public class CategoryController {
                     "'" + savedCategory.getName() + "' 상품이 성공적으로 등록되었습니다.");
         } catch (DuplicateCategoryException e) {
             bindingResult.rejectValue("name", "duplicate", e.getMessage());
-            return "categoryCreateForm";
+            return "categoryForm";
         }
 
+        return "redirect:/categories";
+    }
+
+    @PostMapping("/{id}/delete")
+    public String deleteCategory(@PathVariable Long id, RedirectAttributes redirectAttributes) {
+        categoryService.deleteCategory(id);
+        redirectAttributes.addFlashAttribute("successMessage", "카테고리가 삭제되었습니다.");
         return "redirect:/categories";
     }
 }

@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -38,5 +39,9 @@ public class CategoryService {
                 "상품 " + count + "개가 연결되어 있어 삭제할 수 없습니다.");
 
         categoryRepository.delete(id);
+    }
+
+    public Optional<Category> getCategoryById(Long id) {
+        return categoryRepository.findById(id);
     }
 }
