@@ -19,16 +19,16 @@ public class CategoryController {
 
     private final CategoryService categoryService;
 
-    @GetMapping("/create")
-    public String showCreateForm(Model model) {
-        model.addAttribute("categoryForm", new CategoryForm());
-        return "categoryForm";
-    }
-
     @GetMapping
     public String listCategories(Model model) {
         model.addAttribute("categories", categoryService.getAllCategories());
         return "categoryList";
+    }
+
+    @GetMapping("/create")
+    public String showCreateForm(Model model) {
+        model.addAttribute("categoryForm", new CategoryForm());
+        return "categoryForm";
     }
 
     @PostMapping("/create")
