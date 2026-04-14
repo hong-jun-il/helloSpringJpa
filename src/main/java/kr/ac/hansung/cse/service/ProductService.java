@@ -1,5 +1,8 @@
 package kr.ac.hansung.cse.service;
 
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.TypedQuery;
 import kr.ac.hansung.cse.model.Category;
 import kr.ac.hansung.cse.model.Product;
 import kr.ac.hansung.cse.repository.CategoryRepository;
@@ -52,6 +55,8 @@ import java.util.Optional;
 @Transactional(readOnly = true) // 클래스 기본값: 읽기 전용 트랜잭션
 public class ProductService {
 
+    @PersistenceContext
+    private EntityManager em;
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
 
@@ -132,5 +137,28 @@ public class ProductService {
     @Transactional
     public void deleteProduct(Long id) {
         productRepository.delete(id);
+    }
+
+    // readOnly = true 상속: 검색은 읽기 전용 트랜잭션으로 충분
+    public List<Product> findByCondition(String keyword, Long categoryId) {
+        String jpql = "select p from Product p join fetch p.category c where 1=1";
+
+        if (keyword != null && !keyword.isBlank()) {
+            jpql += " and p.name like :keyword";
+        }
+        if (categoryId != null) {
+            jpql += " and c.id = :categoryId";
+        }
+
+        TypedQuery<Product> query = em.createQuery(jpql, Product.class);
+
+        if (keyword != null && !keyword.isBlank()) {
+            query.setParameter("keyword", "%" + keyword + "%");
+        }
+        if (categoryId != null) {
+            query.setParameter("categoryId", categoryId);
+        }
+
+        return query.getResultList();
     }
 }

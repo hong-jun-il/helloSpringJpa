@@ -12,13 +12,9 @@ import lombok.Setter;
 public class CategoryForm {
     private Long id;
 
-    @NotBlank(message = "카테고리 이름은 필수입니다")
-    @Size(min = 2, max = 20, message = "2자 이상 20자 이하로 입력해주세요")
+    @NotBlank(message = "카테고리 이름을 입력하세요")
+    @Size(max = 50, message = "50자 이내로 입력하세요")
     private String name;
-
-    public String getName() {
-        return this.name;
-    }
 
     public Category toEntity() {
         return new Category(this.name);
