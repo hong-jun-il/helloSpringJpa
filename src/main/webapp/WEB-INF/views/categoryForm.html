@@ -20,7 +20,11 @@
 </head>
 <body>
 
-<h1>새 카테고리 등록</h1>
+<h1>
+    새 카테고리 등록
+    <p th:text="${'실습 수행: ' + #temporals.format(#temporals.createNow(), 'yyyy-MM-dd HH:mm:ss') + ' 학번: 2171378  |  성명: 홍준일'}">
+    </p>
+</h1>
 
 <a class="back-btn" th:href="@{/categories}">← 목록으로 돌아가기</a>
 
